@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>美国禁酒令时代：互动式沉浸体验</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0d17;
+      --fg: #e8ecf1;
+      --accent: #ff8c37;
+      --muted: #94a3b8;
+      --card: rgba(255,255,255,0.04);
+      --border: rgba(255,255,255,0.08);
+      --glow: 0 20px 60px rgba(255,140,55,0.28);
+    }
+    * {box-sizing: border-box;}
+    body {
+      margin: 0;
+      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(circle at 20% 20%, rgba(255,140,55,0.12), transparent 25%),
+                  radial-gradient(circle at 80% 0%, rgba(86,112,255,0.18), transparent 25%),
+                  var(--bg);
+      color: var(--fg);
+      line-height: 1.65;
+      letter-spacing: 0.02em;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(14px);
+      background: rgba(11,13,23,0.75);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 1.5rem;
+      gap: 1rem;
+    }
+    nav .brand {font-weight: 700; letter-spacing: 0.08em; color: var(--accent);}
+    nav .links {display: flex; gap: 1rem; flex-wrap: wrap;}
+    nav a {color: var(--fg); text-decoration: none; padding: 0.5rem 0.75rem; border-radius: 999px; border: 1px solid transparent; transition: 0.2s ease;}
+    nav a:hover {border-color: var(--border); background: rgba(255,255,255,0.06);}
+    .container {max-width: 1200px; margin: auto; padding: 1.5rem;}
+    .hero {
+      margin-top: 1rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .hero-card {
+      padding: 2rem;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(255,140,55,0.12), rgba(86,112,255,0.14));
+      border: 1px solid var(--border);
+      box-shadow: var(--glow);
+    }
+    h1 {margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2;}
+    .tagline {color: var(--muted); margin: 1rem 0 1.5rem;}
+    .cta {display: inline-flex; gap: 0.75rem; flex-wrap: wrap;}
+    .button {
+      background: var(--accent);
+      color: #0b0d17;
+      border: none;
+      padding: 0.85rem 1.4rem;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 10px 30px rgba(255,140,55,0.35);
+      transition: transform 0.15s ease;
+    }
+    .button:hover {transform: translateY(-2px);}
+    .outline {background: transparent; color: var(--fg); border: 1px solid var(--border); box-shadow: none;}
+    .glow-card {
+      padding: 1.5rem;
+      border-radius: 18px;
+      background: var(--card);
+      border: 1px solid var(--border);
+    }
+    section {margin: 2.5rem 0;}
+    section h2 {margin-bottom: 0.75rem; font-size: 1.6rem;}
+    .grid {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
+    .pill {padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 0.9rem;}
+    .timeline {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+    }
+    .range {width: 100%;}
+    .timeline-cards {display: grid; gap: 0.75rem;}
+    .timeline-card {
+      padding: 1rem;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      transition: 0.2s ease;
+    }
+    .timeline-card.active {border-color: var(--accent); box-shadow: var(--glow);}
+    .chips {display: flex; gap: 0.5rem; flex-wrap: wrap;}
+    .chip {padding: 0.35rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.08); font-size: 0.9rem;}
+    .flex {display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;}
+    .stat {
+      flex: 1 1 200px;
+      padding: 1rem;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(86,112,255,0.18), rgba(255,140,55,0.18));
+      border: 1px solid var(--border);
+    }
+    .stat strong {font-size: 1.6rem;}
+    .cards-hover {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
+    .cards-hover article {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      padding: 1.25rem;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .cards-hover article:hover {transform: translateY(-4px); box-shadow: var(--glow);}
+    .badge {position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.35rem 0.7rem; background: var(--accent); color: #0b0d17; border-radius: 999px; font-weight: 700;}
+    .switch-row {display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;}
+    .toggle {appearance: none; width: 48px; height: 26px; background: var(--border); border-radius: 13px; position: relative; outline: none; cursor: pointer; transition: 0.2s ease;}
+    .toggle::after {content: ""; position: absolute; width: 20px; height: 20px; top: 3px; left: 3px; background: #fff; border-radius: 50%; transition: 0.2s ease;}
+    .toggle:checked {background: var(--accent);}
+    .toggle:checked::after {transform: translateX(22px);}
+    .meter {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .meter-fill {height: 100%; width: 40%; background: linear-gradient(90deg, #566fff, #ff8c37); transition: width 0.3s ease;}
+    footer {margin: 2rem 0 1rem; color: var(--muted); font-size: 0.9rem; text-align: center;}
+    .two-col {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));}
+    .list {margin: 0.4rem 0; color: var(--muted);}
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <div class="brand">PROHIBITION LAB</div>
+      <div class="links">
+        <a href="#intro">概览</a>
+        <a href="#timeline">时间轴</a>
+        <a href="#causes">成因</a>
+        <a href="#effects">影响</a>
+        <a href="#repeal">废除与遗产</a>
+        <a href="#refs">参考文献</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section id="intro" class="hero">
+      <div class="hero-card">
+        <h1>美国禁酒令时代：<br>沉浸式互动长卷</h1>
+        <p class="tagline">1920–1933 的“高尚实验”如何从道德理想变成地下狂潮？用交互式时间轴、数据刻度与观点滑块，探索政策、文化与经济的碰撞。</p>
+        <div class="cta">
+          <button class="button" onclick="scrollToSection('timeline')">进入时间线</button>
+          <button class="button outline" onclick="scrollToSection('causes')">快速了解成因</button>
+        </div>
+      </div>
+      <div class="glow-card">
+        <div class="pill">互动提示</div>
+        <h3>体验指南</h3>
+        <ul>
+          <li>拖动“关键年份”滑块，解锁每个节点的背景、数据与关键词。</li>
+          <li>切换“改革视角”开关，观察支持与反对禁酒的社会力量。</li>
+          <li>移动“公共支持度”滑块，查看执法力度与犯罪风险的动态平衡。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="timeline">
+      <div class="flex">
+        <h2>关键年份 · 交互时间轴</h2>
+        <span class="pill" id="year-label">1913</span>
+      </div>
+      <div class="timeline">
+        <input type="range" min="0" max="6" value="0" class="range" id="year-range" />
+        <div class="timeline-cards" id="timeline-cards"></div>
+      </div>
+    </section>
+
+    <section id="causes">
+      <div class="flex">
+        <h2>成因矩阵 · 选择你的视角</h2>
+        <label class="switch-row">改革视角
+          <input type="checkbox" class="toggle" id="toggle-view" />
+        </label>
+      </div>
+      <div class="grid" id="cause-grid"></div>
+    </section>
+
+    <section id="effects">
+      <h2>影响雷达 · 正反效应并存</h2>
+      <div class="flex">
+        <div class="stat">
+          <strong id="support-value">20%</strong>
+          <div>公共支持度（1922 年基准）</div>
+          <div class="meter"><div class="meter-fill" id="support-meter"></div></div>
+          <input type="range" min="20" max="80" value="20" id="support-range" class="range" />
+        </div>
+        <div class="stat">
+          <strong id="enforce-value">1500</strong>
+          <div>联邦执法人员（人）</div>
+          <p class="list">执法资源有限，腐败、地方抵制与跨境走私使“禁而不止”。</p>
+        </div>
+        <div class="stat">
+          <strong id="crime-value">12%</strong>
+          <div>芝加哥凶杀率上升</div>
+          <p class="list">帮派争夺酒类黑市导致暴力攀升，象征性事件包括圣瓦伦丁节大屠杀。</p>
+        </div>
+      </div>
+      <div class="cards-hover">
+        <article>
+          <span class="badge">经济</span>
+          <h3>财政空缺与就业震荡</h3>
+          <p class="list">失去 50–110 亿美元酒税 + 3 亿美元执法成本，使大萧条前夕的联邦预算更吃紧；合法酿造与餐饮业萎缩，大量岗位转入地下经济。</p>
+        </article>
+        <article>
+          <span class="badge">社会</span>
+          <h3>地下文化与性别秩序重塑</h3>
+          <p class="list">秘酒馆与爵士文化让中产和年轻人拥抱“越界”生活；女性因参与走私或公共社交获得前所未有的行动空间。</p>
+        </article>
+        <article>
+          <span class="badge">健康</span>
+          <h3>非法酒的致命风险</h3>
+          <p class="list">未受监管的“私酿酒”常含工业酒精等毒素，估计造成约 1 万起中毒死亡；尽管肝硬化短期下降，整体饮酒仍未消失。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="repeal" class="two-col">
+      <div class="glow-card">
+        <h2>废除进程 · 1933</h2>
+        <div class="chips">
+          <span class="chip">1933 年 12 月 5 日</span>
+          <span class="chip">第 21 条修正案</span>
+          <span class="chip">州级公约表决</span>
+        </div>
+        <p class="list">大萧条引发对就业与税收的迫切需求，罗斯福签署《啤酒与葡萄酒收入法》先行松绑；随后各州通过公约（绕过保守议会）批准第 21 条修正案，终止联邦禁酒并恢复州管控。</p>
+      </div>
+      <div class="glow-card">
+        <h2>遗产 · 当代启示</h2>
+        <ul>
+          <li class="list">法律与民意需同频：强行道德立法会滋生黑市与对法治的疏离。</li>
+          <li class="list">公共卫生与监管：从禁酒到“毒品战争”的争论反复提醒政策设计应兼顾减害与税收激励。</li>
+          <li class="list">联邦-州权平衡：州际差异仍决定酒类销售、税率与营业时段的拼图式格局。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="refs">
+      <h2>参考文献（节选）</h2>
+      <div class="grid">
+        <div class="glow-card">
+          <h4>专著与论文</h4>
+          <ul>
+            <li class="list">D. Okrent, <em>Last Call: The Rise and Fall of Prohibition</em>, 2010.</li>
+            <li class="list">Daron Acemoglu & David Autor 等, “Women, War, and Wages”, 2004.</li>
+            <li class="list">Emily Owens, “Are Underground Markets Really More Violent?”, 2011.</li>
+            <li class="list">David E. Kyvig, “Repealing National Prohibition”, 1979.</li>
+            <li class="list">Camilo García-Jimeno, “Political Economy of Moral Conflict”, 2016.</li>
+          </ul>
+        </div>
+        <div class="glow-card">
+          <h4>历史文件</h4>
+          <ul>
+            <li class="list">《第 18 条修正案》及《沃斯泰德法案》。</li>
+            <li class="list">《第 21 条修正案》废除禁酒，授权各州管制。</li>
+            <li class="list">Webb–Kenyon Act (1913) 以及 1933 年《啤酒与葡萄酒收入法》。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>以互动视角回望 1920–1933：法律、经济与社会情绪的共振实验。</footer>
+
+  <script>
+    const timelineData = [
+      {year: 1913, title: 'Webb–Kenyon Act', detail: '禁止从“湿州”向“干州”运输酒类，为联邦介入铺路。'},
+      {year: 1917, title: '第 18 条修正案通过', detail: '国会在一战背景下通过禁酒修正案，强调节粮与爱国。'},
+      {year: 1919, title: '沃斯泰德法案', detail: '将含酒精 >0.5% 的饮品定义为“烈性”，设立执法框架。'},
+      {year: 1920, title: '联邦禁酒生效', detail: '仅约 1500 名联邦探员，地方配合不足；黑市萌芽。'},
+      {year: 1925, title: '黑市与帮派化', detail: '走私与私酿规模化，芝加哥等城市帮派暴力升级。'},
+      {year: 1929, title: '公众转向', detail: '民调显示多数倾向废除，圣瓦伦丁节大屠杀加剧质疑。'},
+      {year: 1933, title: '第 21 条修正案', detail: '通过州公约 ratification，正式废除联邦禁酒，州级管制回归。'}
+    ];
+
+    const causes = {
+      reform: [
+        {title: '道德改革', text: '禁酒被视为遏制贫困、家庭暴力的道德工程，得到福音派与女权团体支持。', tag: '社会/宗教'},
+        {title: '工业效率', text: '企业希望保持工人纪律与安全，减少酗酒导致的旷工与事故。', tag: '经济'},
+        {title: '税制转向', text: '16 条修正案开征所得税，降低联邦对酒税的依赖，使禁酒在财政上可行。', tag: '财政'},
+        {title: '战时节粮', text: '一战时期强调谷物节约与反德情绪（酿酒业多由德裔掌控），推动禁酒合法性。', tag: '政治'},
+        {title: '本土主义', text: '将移民群体的酒文化视为“不美国”的威胁，推动地方与联邦立法。', tag: '文化'}
+      ],
+      resistance: [
+        {title: '城市抵抗', text: '大城市经济依赖夜生活与餐饮，地方执法消极甚至合谋。', tag: '城市/经济'},
+        {title: '执法缺口', text: '1500 名联邦探员难以覆盖全国，腐败滋生，黑市越打越旺。', tag: '治理'},
+        {title: '公共反弹', text: '中产与青年在秘酒馆形成“反叛文化”，逐步转向支持废除。', tag: '文化/世代'},
+        {title: '黑市暴力', text: '帮派化垄断导致凶杀率上升，舆论将暴力与禁酒绑定。', tag: '治安'},
+        {title: '财政压力', text: '失去酒税、执法成本高企，经济大萧条后政府更需合法酒税。', tag: '财政'}
+      ]
+    };
+
+    const timelineCards = document.getElementById('timeline-cards');
+    const yearRange = document.getElementById('year-range');
+    const yearLabel = document.getElementById('year-label');
+
+    function renderTimeline(activeIndex) {
+      timelineCards.innerHTML = '';
+      timelineData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'timeline-card' + (index === activeIndex ? ' active' : '');
+        card.innerHTML = `<div class="chips"><span class="chip">${item.year}</span></div><h3>${item.title}</h3><p class="list">${item.detail}</p>`;
+        card.addEventListener('click', () => {
+          yearRange.value = index;
+          updateYear(index);
+        });
+        timelineCards.appendChild(card);
+      });
+    }
+
+    function updateYear(index) {
+      const item = timelineData[index];
+      yearLabel.textContent = item.year;
+      renderTimeline(index);
+    }
+
+    yearRange.addEventListener('input', (e) => updateYear(parseInt(e.target.value, 10)));
+    updateYear(0);
+
+    const causeGrid = document.getElementById('cause-grid');
+    const toggleView = document.getElementById('toggle-view');
+
+    function renderCauses(mode) {
+      causeGrid.innerHTML = '';
+      causes[mode].forEach(cause => {
+        const card = document.createElement('div');
+        card.className = 'glow-card';
+        card.innerHTML = `<div class="chips"><span class="chip">${cause.tag}</span></div><h3>${cause.title}</h3><p class="list">${cause.text}</p>`;
+        causeGrid.appendChild(card);
+      });
+    }
+
+    toggleView.addEventListener('change', () => renderCauses(toggleView.checked ? 'resistance' : 'reform'));
+    renderCauses('reform');
+
+    const supportRange = document.getElementById('support-range');
+    const supportValue = document.getElementById('support-value');
+    const supportMeter = document.getElementById('support-meter');
+    const enforceValue = document.getElementById('enforce-value');
+    const crimeValue = document.getElementById('crime-value');
+
+    supportRange.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      supportValue.textContent = `${val}%`;
+      supportMeter.style.width = `${val}%`;
+      const enforce = Math.round(1500 * (1 + (val - 20) / 200));
+      const crime = Math.max(4, 16 - (val - 20) * 0.15).toFixed(1);
+      enforceValue.textContent = enforce;
+      crimeValue.textContent = `${crime}%`;
+    });
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+    }
+  </script>
+</body>
+</html>
