@@ -105,9 +105,55 @@
       border: 1px solid var(--border);
       transition: 0.2s ease;
       transform-style: preserve-3d;
-      perspective: 900px;
+      perspective: 1200px;
+      position: relative;
+      cursor: pointer;
+      min-height: 170px;
     }
     .timeline-card.active {border-color: var(--accent); box-shadow: var(--glow);}
+    .timeline-card .face {
+      position: absolute;
+      inset: 0;
+      padding: 1rem;
+      border-radius: 14px;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      border: 1px solid var(--border);
+      display: grid;
+      align-content: center;
+      gap: 0.75rem;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .timeline-card .front {
+      background: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.1), transparent 38%),
+                  radial-gradient(circle at 80% 30%, rgba(255,140,55,0.18), transparent 32%),
+                  #03040a;
+      color: #e8ecf1;
+      justify-items: center;
+      text-align: center;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .timeline-card .front .logo-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,140,55,0.18));
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #ffe9d8;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    }
+    .timeline-card .front .front-label {color: var(--muted); font-size: 0.9rem;}
+    .timeline-card .back {
+      background: rgba(255,255,255,0.03);
+      transform: rotateY(-180deg);
+    }
+    .timeline-card.flipped .front {transform: rotateY(180deg);}    
+    .timeline-card.flipped .back {transform: rotateY(0deg);}    
     .timeline-card.flip-seq {
       animation: flipCard 0.6s var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
     }
@@ -161,9 +207,13 @@
       overflow: hidden;
       border: 1px solid var(--border);
       border-radius: 18px;
-      background: linear-gradient(145deg, rgba(86,112,255,0.14), rgba(255,140,55,0.12));
+      background: transparent;
       box-shadow: 0 15px 40px rgba(0,0,0,0.35);
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+      transform-style: preserve-3d;
+      perspective: 1200px;
+      cursor: pointer;
+      min-height: 220px;
     }
     .cause-card::after {
       content: "";
@@ -180,6 +230,44 @@
     .cause-card.reveal {
       animation: popSpin 0.72s var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
     }
+    .cause-card .face {
+      position: absolute;
+      inset: 0;
+      padding: 1.25rem;
+      border-radius: 18px;
+      backface-visibility: hidden;
+      border: 1px solid var(--border);
+      display: grid;
+      gap: 0.65rem;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+    }
+    .cause-card .front {
+      background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(8,10,18,0.92));
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .cause-card .front .logo-mark {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(86,112,255,0.22), rgba(255,140,55,0.2));
+      display: grid;
+      place-items: center;
+      color: #fff1e6;
+      font-weight: 800;
+      box-shadow: 0 16px 38px rgba(0,0,0,0.45);
+    }
+    .cause-card .front .front-label {color: var(--muted);}
+    .cause-card .back {
+      background: linear-gradient(145deg, rgba(86,112,255,0.14), rgba(255,140,55,0.12));
+      transform: rotateY(-180deg);
+    }
+    .cause-card.flipped .front {transform: rotateY(180deg);}    
+    .cause-card.flipped .back {transform: rotateY(0deg);}    
     @keyframes popSpin {
       0% {transform: scale(0.82) rotateY(-35deg); opacity: 0;}
       55% {transform: scale(1.03) rotateY(6deg); opacity: 1;}
@@ -226,7 +314,7 @@
     <section id="timeline">
       <div class="flex">
         <h2>关键年份 · 交互时间轴</h2>
-        <span class="pill" id="year-label">1913</span>
+        <span class="pill" id="year-label">点击牌面开启</span>
       </div>
       <div class="timeline">
         <input type="range" min="0" max="6" value="0" class="range" id="year-range" />
@@ -361,22 +449,40 @@
     const timelineCards = document.getElementById('timeline-cards');
     const yearRange = document.getElementById('year-range');
     const yearLabel = document.getElementById('year-label');
+    const flippedYears = new Set();
+    let timelineInteracted = false;
 
     function renderTimeline(activeIndex) {
       timelineCards.innerHTML = '';
       timelineData.forEach((item, index) => {
+        const isActive = index === activeIndex;
+        const isFlipped = flippedYears.has(index) || (isActive && timelineInteracted);
         const card = document.createElement('div');
-        card.className = 'timeline-card' + (index === activeIndex ? ' active' : '');
+        card.className = `timeline-card${isActive ? ' active' : ''}${isFlipped ? ' flipped' : ''}`;
         card.style.setProperty('--delay', `${index * 80}ms`);
-        card.innerHTML = `<div class="chips"><span class="chip">${item.year}</span></div><h3>${item.title}</h3><p class="list">${item.detail}</p>`;
+        card.innerHTML = `
+          <div class="face front">
+            <div class="logo-mark">PL</div>
+            <div class="front-label">${timelineInteracted ? '继续探索' : '点击翻面'}</div>
+            <div class="front-label">${item.year}</div>
+          </div>
+          <div class="face back">
+            <div class="chips"><span class="chip">${item.year}</span></div>
+            <h3>${item.title}</h3>
+            <p class="list">${item.detail}</p>
+          </div>`;
         card.addEventListener('click', () => {
+          timelineInteracted = true;
+          flippedYears.add(index);
           yearRange.value = index;
           updateYear(index);
         });
-        requestAnimationFrame(() => {
-          card.classList.add('flip-seq');
-          setTimeout(() => card.classList.remove('flip-seq'), 750);
-        });
+        if (isFlipped) {
+          requestAnimationFrame(() => {
+            card.classList.add('flip-seq');
+            setTimeout(() => card.classList.remove('flip-seq'), 750);
+          });
+        }
         timelineCards.appendChild(card);
       });
     }
@@ -387,30 +493,67 @@
       renderTimeline(index);
     }
 
-    yearRange.addEventListener('input', (e) => updateYear(parseInt(e.target.value, 10)));
-    updateYear(0);
+    yearRange.addEventListener('input', (e) => {
+      timelineInteracted = true;
+      const idx = parseInt(e.target.value, 10);
+      flippedYears.add(idx);
+      updateYear(idx);
+    });
+
+    renderTimeline(null);
 
     const causeGrid = document.getElementById('cause-grid');
     const toggleView = document.getElementById('toggle-view');
+    const causeFlipped = { reform: new Set(), resistance: new Set() };
+    let causeInteracted = false;
 
     function renderCauses(mode) {
       causeGrid.innerHTML = '';
       causes[mode].forEach((cause, idx) => {
+        const isFlipped = causeFlipped[mode].has(idx) && causeInteracted;
         const card = document.createElement('div');
-        card.className = 'cause-card glow-card reveal';
+        card.className = `cause-card glow-card reveal${isFlipped ? ' flipped' : ''}`;
         card.style.setProperty('--delay', `${idx * 60}ms`);
         card.innerHTML = `
-          <div class="chips"><span class="chip">${cause.tag}</span></div>
-          <h3>${cause.title}</h3>
-          <p class="list">${cause.text}</p>
-          <div class="meter" aria-hidden="true"><div class="meter-fill" style="width:${60 + idx * 8}%"></div></div>
+          <div class="face front">
+            <div class="logo-mark">BL</div>
+            <div class="front-label">${mode === 'reform' ? '支持视角' : '反对视角'}</div>
+            <div class="front-label">${cause.tag}</div>
+          </div>
+          <div class="face back">
+            <div class="chips"><span class="chip">${cause.tag}</span></div>
+            <h3>${cause.title}</h3>
+            <p class="list">${cause.text}</p>
+            <div class="meter" aria-hidden="true"><div class="meter-fill" style="width:${60 + idx * 8}%"></div></div>
+          </div>
         `;
+        card.addEventListener('click', () => {
+          causeInteracted = true;
+          causeFlipped[mode].add(idx);
+          card.classList.add('flipped');
+        });
         causeGrid.appendChild(card);
         setTimeout(() => card.classList.remove('reveal'), 900 + idx * 20);
       });
     }
 
-    toggleView.addEventListener('change', () => renderCauses(toggleView.checked ? 'resistance' : 'reform'));
+    function cascadeFlip(mode) {
+      const cards = [...causeGrid.querySelectorAll('.cause-card')];
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.classList.add('flipped');
+          causeFlipped[mode].add(i);
+        }, 120 + i * 120);
+      });
+    }
+
+    toggleView.addEventListener('change', () => {
+      const mode = toggleView.checked ? 'resistance' : 'reform';
+      causeInteracted = true;
+      renderCauses(mode);
+      setTimeout(() => cascadeFlip(mode), 80);
+    });
+
     renderCauses('reform');
 
     const supportRange = document.getElementById('support-range');
