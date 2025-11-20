@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>美国禁酒令时代：互动式沉浸体验</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Libre+Baskerville:wght@400;700&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6eddc;
+      --bg-fiber: rgba(83, 67, 53, 0.08);
+      --fg: #2b1d0f;
+      --accent: #8b5e3c;
+      --muted: #615142;
+      --card: rgba(255, 252, 244, 0.92);
+      --card-line: rgba(0, 0, 0, 0.05);
+      --border: rgba(57, 39, 26, 0.32);
+      --shadow: 0 12px 28px rgba(43, 29, 15, 0.12);
+    }
+    * {box-sizing: border-box;}
+    body {
+      margin: 0;
+      font-family: 'Libre Baskerville', Georgia, serif;
+      background: var(--bg);
+      color: var(--fg);
+      line-height: 1.65;
+      letter-spacing: 0.01em;
+      position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 18% 24%, rgba(139,94,60,0.08), transparent 33%),
+        radial-gradient(circle at 82% 12%, rgba(112,89,66,0.08), transparent 33%),
+        repeating-linear-gradient(90deg, var(--card-line) 0, var(--card-line) 1px, transparent 1px, transparent 6px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 8px);
+      mix-blend-mode: multiply;
+      opacity: 0.92;
+      z-index: 0;
+    }
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(243, 236, 223, 0.96);
+      border-bottom: 3px double rgba(43, 29, 15, 0.5);
+      z-index: 10;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.25rem 1.5rem 0.75rem;
+      gap: 1rem;
+    }
+    nav .brand {
+      font-family: 'IM Fell English SC', 'Playfair Display', serif;
+      letter-spacing: 0.12em;
+      font-size: 1.35rem;
+      color: var(--fg);
+      text-transform: uppercase;
+    }
+    nav .links {display: flex; gap: 0.9rem; flex-wrap: wrap;}
+    nav a {
+      color: var(--fg);
+      text-decoration: none;
+      padding: 0.35rem 0.45rem;
+      border-bottom: 1px solid transparent;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: 0.2s ease;
+    }
+    nav a:hover {border-color: rgba(43,29,15,0.65); color: var(--accent);}
+    .container {max-width: 1100px; margin: auto; padding: 1.5rem; position: relative; z-index: 1;}
+    .broadsheet {
+      background: linear-gradient(180deg, rgba(255,253,249,0.95), rgba(248,240,226,0.95));
+      border: 2px solid rgba(43,29,15,0.38);
+      border-radius: 16px;
+      box-shadow: 0 24px 40px rgba(43,29,15,0.14);
+      position: relative;
+      overflow: hidden;
+    }
+    .broadsheet::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(43,29,15,0.18);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+    .section-slab {
+      position: relative;
+      padding: 1.25rem;
+      margin: 1.75rem 0;
+      background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.7), transparent 36%),
+                  radial-gradient(circle at 82% 22%, rgba(139,94,60,0.08), transparent 36%),
+                  linear-gradient(90deg, rgba(0,0,0,0.04) 0, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 360px),
+                  var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .section-slab::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(90deg, transparent 0, transparent 33.33%, rgba(0,0,0,0.08) 33.33%, rgba(0,0,0,0.08) 34.2%, transparent 34.2%, transparent 34.8%, rgba(0,0,0,0.04) 34.8%, rgba(0,0,0,0.04) 35.5%, transparent 35.5%, transparent 100%),
+        repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 10px);
+      mix-blend-mode: multiply;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+    .section-slab::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px dashed rgba(43,29,15,0.24);
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0.65;
+    }
+    .hero {
+      margin-top: 0.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+    .hero-card {
+      padding: 2rem;
+      border-radius: 18px;
+      background: linear-gradient(180deg, #fffaf1, #f0e6d6);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(139,94,60,0.08), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+    h1 {margin: 0; font-family: 'Playfair Display', 'Libre Baskerville', serif; font-size: clamp(2.1rem, 4vw, 3.1rem); line-height: 1.15; letter-spacing: 0.04em;}
+    .tagline {color: var(--muted); margin: 1rem 0 1.35rem; font-size: 1.02rem;}
+    .tagline::first-letter {font-size: 1.4em; font-family: 'IM Fell English SC', serif; padding-right: 4px;}
+    .cta {display: inline-flex; gap: 0.75rem; flex-wrap: wrap;}
+    .button {
+      background: linear-gradient(180deg, #fdf7eb, #eddcc3);
+      color: var(--fg);
+      border: 1px solid rgba(43,29,15,0.35);
+      padding: 0.78rem 1.35rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--shadow);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .button:hover {transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 18px 32px rgba(43,29,15,0.18);}
+    .outline {background: transparent; color: var(--fg); border: 1px solid rgba(43,29,15,0.45); box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);}
+    h3, h4 {font-family: 'Playfair Display', serif; letter-spacing: 0.02em; color: var(--fg);}
+    .glow-card {
+      padding: 1.5rem;
+      border-radius: 16px;
+      background: radial-gradient(circle at 14% 18%, rgba(139,94,60,0.05), transparent 32%),
+                  repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 10px),
+                  var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    section {margin: 2.25rem 0; position: relative;}
+    .news-ribbon {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      border-bottom: 2px double rgba(43,29,15,0.45);
+      padding-bottom: 0.35rem;
+      margin-bottom: 0.85rem;
+    }
+    section h2 {margin: 0; font-size: 1.55rem; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Playfair Display', serif;}
+    .dateline {color: var(--muted); font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase;}
+    .grid {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
+    .pill {padding: 0.4rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; background: rgba(255,255,255,0.7);}
+    .timeline {
+      background: linear-gradient(180deg, #fff8ec, #efe0c8);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 1.25rem;
+      display: grid;
+      gap: 1rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .timeline::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(43,29,15,0.18);
+      border-radius: 10px;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+    .range {width: 100%;}
+    .timeline-cards {display: grid; gap: 0.75rem;}
+    .timeline-card {
+      padding: 1rem;
+      border-radius: 14px;
+      background: linear-gradient(180deg, rgba(43,29,15,0.04), rgba(43,29,15,0.02));
+      border: 1px solid var(--border);
+      transition: 0.2s ease;
+      transform-style: preserve-3d;
+      perspective: 1200px;
+      position: relative;
+      cursor: pointer;
+      min-height: 170px;
+      overflow: hidden;
+    }
+    .timeline-card.active {border-color: var(--accent); box-shadow: var(--shadow);}
+    .timeline-card .face {
+      position: absolute;
+      inset: 0;
+      padding: 1rem;
+      border-radius: 14px;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+      border: 1px solid var(--border);
+      display: grid;
+      align-content: center;
+      gap: 0.75rem;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .timeline-card .front {
+      background: radial-gradient(circle at 30% 22%, rgba(255,255,255,0.1), transparent 46%), linear-gradient(135deg, rgba(8,6,5,0.95), rgba(14,12,10,0.95));
+      color: #f5e9d4;
+      justify-items: center;
+      text-align: center;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), inset 0 0 0 2px rgba(0,0,0,0.35);
+      transform: rotateY(0deg);
+      position: relative;
+    }
+    .timeline-card .front::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(255,255,255,0.12), transparent 50%);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+    .timeline-card .front .logo-mark {
+      width: 54px;
+      height: 54px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), transparent 55%), linear-gradient(180deg, #1a140f, #0e0c09);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #f0d7b5;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.38);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .timeline-card .front .front-label {color: #d7c8b8; font-size: 0.9rem;}
+    .timeline-card .back {
+      background: linear-gradient(180deg, #fdf6e4, #e7d2b2);
+      transform: rotateY(-180deg);
+      align-content: start;
+      gap: 0.45rem;
+      color: var(--fg);
+    }
+    .timeline-card.flipped .front {transform: rotateY(180deg);}
+    .timeline-card.flipped .back {transform: rotateY(0deg);}
+    .timeline-card.flip-seq {
+      animation: flipCard 0.6s var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    @keyframes flipCard {
+      0% {transform: rotateY(-90deg) translateY(10px); opacity: 0;}
+      60% {transform: rotateY(12deg) translateY(-2px); opacity: 1;}
+      100% {transform: rotateY(0deg) translateY(0);}
+    }
+    .chips {display: flex; gap: 0.5rem; flex-wrap: wrap;}
+    .chip {padding: 0.35rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.7); border: 1px solid var(--border); font-size: 0.88rem; color: var(--fg);}
+    .flex {display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;}
+    .stat {
+      flex: 1 1 200px;
+      padding: 1rem;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #fdf7eb, #e9dbc5);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .stat strong {font-size: 1.6rem;}
+    .cards-hover {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
+    .cards-hover article {
+      position: relative;
+      overflow: hidden;
+      border-radius: 18px;
+      padding: 1.25rem;
+      background: linear-gradient(180deg, #fff8ec, #efe0c8);
+      border: 1px solid var(--border);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+    .cards-hover article:hover {transform: translateY(-4px); box-shadow: 0 16px 30px rgba(43,29,15,0.18);}
+    .badge {position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.35rem 0.7rem; background: var(--accent); color: #fffaf1; border-radius: 999px; font-weight: 700; letter-spacing: 0.04em;}
+    .switch-row {display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;}
+    .toggle {appearance: none; width: 48px; height: 26px; background: var(--border); border-radius: 13px; position: relative; outline: none; cursor: pointer; transition: 0.2s ease;}
+    .toggle::after {content: ""; position: absolute; width: 20px; height: 20px; top: 3px; left: 3px; background: #fff; border-radius: 50%; transition: 0.2s ease;}
+    .toggle:checked {background: var(--accent);}
+    .toggle:checked::after {transform: translateX(22px);}
+    .meter {
+      width: 100%;
+      height: 12px;
+      border-radius: 999px;
+      background: rgba(43,29,15,0.08);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .meter-fill {height: 100%; width: 40%; background: linear-gradient(90deg, #b07a4e, #8b5e3c); transition: width 0.3s ease;}
+    footer {margin: 2rem 0 1rem; color: var(--muted); font-size: 0.9rem; text-align: center;}
+    .two-col {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));}
+    .list {margin: 0.4rem 0; color: var(--muted);}
+    .cause-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: transparent;
+      box-shadow: var(--shadow);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
+      transform-style: preserve-3d;
+      perspective: 1200px;
+      cursor: pointer;
+      min-height: 220px;
+    }
+    .cause-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.08), transparent 40%);
+      pointer-events: none;
+    }
+    .cause-card:hover {
+      transform: translateY(-4px) rotateX(2deg) rotateY(-2deg);
+      box-shadow: 0 16px 30px rgba(43,29,15,0.18);
+      border-color: rgba(139,94,60,0.7);
+    }
+    .cause-card.reveal {
+      animation: popSpin 0.72s var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+    .cause-card .face {
+      position: absolute;
+      inset: 0;
+      padding: 1.25rem;
+      border-radius: 18px;
+      backface-visibility: hidden;
+      border: 1px solid var(--border);
+      display: grid;
+      gap: 0.65rem;
+      transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
+    }
+    .cause-card .front {
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.07), transparent 58%), linear-gradient(135deg, rgba(6,5,5,0.95), rgba(15,12,10,0.95));
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+    .cause-card .front .logo-mark {
+      width: 58px;
+      height: 58px;
+      border-radius: 14px;
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), transparent 55%), linear-gradient(180deg, #1a140f, #0e0c09);
+      display: grid;
+      place-items: center;
+      color: #fff1e6;
+      font-weight: 800;
+      box-shadow: 0 16px 38px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .cause-card .front .front-label {color: var(--muted);}
+    .cause-card .back {
+      background: linear-gradient(180deg, #fdf6e4, #e7d2b2);
+      transform: rotateY(-180deg);
+      gap: 0.6rem;
+      color: var(--fg);
+    }
+    .cause-card.flipped .front {transform: rotateY(180deg);}
+    .cause-card.flipped .back {transform: rotateY(0deg);}
+    .cause-card .back p {margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;}
+    @keyframes popSpin {
+      0% {transform: scale(0.82) rotateY(-35deg); opacity: 0;}
+      55% {transform: scale(1.03) rotateY(6deg); opacity: 1;}
+      100% {transform: scale(1) rotateY(0deg);}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="container">
+      <div class="brand">Prohibition Herald</div>
+      <div class="links">
+        <a href="#intro">概览</a>
+        <a href="#timeline">时间轴</a>
+        <a href="#causes">成因</a>
+        <a href="#effects">影响</a>
+        <a href="#repeal">废除与遗产</a>
+        <a href="#refs">参考文献</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container broadsheet">
+    <section id="intro" class="hero section-slab">
+      <div class="news-ribbon">
+        <span class="dateline">头版 · 1920–1933</span>
+        <span class="dateline">Morning Edition</span>
+      </div>
+      <div class="hero-card">
+        <h1>美国禁酒令时代：<br>沉浸式互动长卷</h1>
+        <p class="tagline">1920–1933 的“高尚实验”如何从道德理想变成地下狂潮？用交互式时间轴、数据刻度与观点滑块，探索政策、文化与经济的碰撞。</p>
+        <div class="cta">
+          <button class="button" onclick="scrollToSection('timeline')">进入时间线</button>
+          <button class="button outline" onclick="scrollToSection('causes')">快速了解成因</button>
+        </div>
+      </div>
+      <div class="glow-card">
+        <div class="pill">互动提示</div>
+        <h3>体验指南</h3>
+        <ul>
+          <li>拖动“关键年份”滑块，解锁每个节点的背景、数据与关键词。</li>
+          <li>切换“改革视角”开关，观察支持与反对禁酒的社会力量。</li>
+          <li>移动“公共支持度”滑块，查看执法力度与犯罪风险的动态平衡。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="timeline" class="section-slab">
+      <div class="news-ribbon">
+        <h2>关键年份 · 交互时间轴</h2>
+        <span class="dateline">号外 · Breaking Wire</span>
+        <span class="pill" id="year-label">点击牌面开启</span>
+      </div>
+      <div class="timeline">
+        <input type="range" min="0" max="6" value="0" class="range" id="year-range" />
+        <div class="timeline-cards" id="timeline-cards"></div>
+      </div>
+    </section>
+
+    <section id="causes" class="section-slab">
+      <div class="news-ribbon">
+        <h2>成因矩阵 · 选择你的视角</h2>
+        <span class="dateline">社论 · Editorial Desk</span>
+        <label class="switch-row">改革视角
+          <input type="checkbox" class="toggle" id="toggle-view" />
+        </label>
+      </div>
+      <div class="grid" id="cause-grid"></div>
+    </section>
+
+    <section id="effects" class="section-slab">
+      <div class="news-ribbon">
+        <h2>影响雷达 · 正反效应并存</h2>
+        <span class="dateline">城市专栏 · City Desk</span>
+      </div>
+      <div class="flex">
+        <div class="stat">
+          <strong id="support-value">20%</strong>
+          <div>公共支持度（1922 年基准）</div>
+          <div class="meter"><div class="meter-fill" id="support-meter"></div></div>
+          <input type="range" min="20" max="80" value="20" id="support-range" class="range" />
+        </div>
+        <div class="stat">
+          <strong id="enforce-value">1500</strong>
+          <div>联邦执法人员（人）</div>
+          <p class="list">执法资源有限，腐败、地方抵制与跨境走私使“禁而不止”。</p>
+        </div>
+        <div class="stat">
+          <strong id="crime-value">12%</strong>
+          <div>芝加哥凶杀率上升</div>
+          <p class="list">帮派争夺酒类黑市导致暴力攀升，象征性事件包括圣瓦伦丁节大屠杀。</p>
+        </div>
+      </div>
+      <div class="cards-hover">
+        <article>
+          <span class="badge">经济</span>
+          <h3>财政空缺与就业震荡</h3>
+          <p class="list">失去 50–110 亿美元酒税 + 3 亿美元执法成本，使大萧条前夕的联邦预算更吃紧；合法酿造与餐饮业萎缩，大量岗位转入地下经济。</p>
+        </article>
+        <article>
+          <span class="badge">社会</span>
+          <h3>地下文化与性别秩序重塑</h3>
+          <p class="list">秘酒馆与爵士文化让中产和年轻人拥抱“越界”生活；女性因参与走私或公共社交获得前所未有的行动空间。</p>
+        </article>
+        <article>
+          <span class="badge">健康</span>
+          <h3>非法酒的致命风险</h3>
+          <p class="list">未受监管的“私酿酒”常含工业酒精等毒素，估计造成约 1 万起中毒死亡；尽管肝硬化短期下降，整体饮酒仍未消失。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="repeal" class="two-col section-slab">
+      <div class="news-ribbon">
+        <span class="dateline">终章 · Evening Dispatch</span>
+        <span class="dateline">1933</span>
+      </div>
+      <div class="glow-card">
+        <h2>废除进程 · 1933</h2>
+        <div class="chips">
+          <span class="chip">1933 年 12 月 5 日</span>
+          <span class="chip">第 21 条修正案</span>
+          <span class="chip">州级公约表决</span>
+        </div>
+        <p class="list">大萧条引发对就业与税收的迫切需求，罗斯福签署《啤酒与葡萄酒收入法》先行松绑；随后各州通过公约（绕过保守议会）批准第 21 条修正案，终止联邦禁酒并恢复州管控。</p>
+      </div>
+      <div class="glow-card">
+        <h2>遗产 · 当代启示</h2>
+        <ul>
+          <li class="list">法律与民意需同频：强行道德立法会滋生黑市与对法治的疏离。</li>
+          <li class="list">公共卫生与监管：从禁酒到“毒品战争”的争论反复提醒政策设计应兼顾减害与税收激励。</li>
+          <li class="list">联邦-州权平衡：州际差异仍决定酒类销售、税率与营业时段的拼图式格局。</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="refs" class="section-slab">
+      <div class="news-ribbon">
+        <h2>参考文献（节选）</h2>
+        <span class="dateline">档案室 · Archive</span>
+      </div>
+      <div class="grid">
+        <div class="glow-card">
+          <h4>专著与论文</h4>
+          <ul>
+            <li class="list">D. Okrent, <em>Last Call: The Rise and Fall of Prohibition</em>, 2010.</li>
+            <li class="list">Daron Acemoglu & David Autor 等, “Women, War, and Wages”, 2004.</li>
+            <li class="list">Emily Owens, “Are Underground Markets Really More Violent?”, 2011.</li>
+            <li class="list">David E. Kyvig, “Repealing National Prohibition”, 1979.</li>
+            <li class="list">Camilo García-Jimeno, “Political Economy of Moral Conflict”, 2016.</li>
+          </ul>
+        </div>
+        <div class="glow-card">
+          <h4>历史文件</h4>
+          <ul>
+            <li class="list">《第 18 条修正案》及《沃斯泰德法案》。</li>
+            <li class="list">《第 21 条修正案》废除禁酒，授权各州管制。</li>
+            <li class="list">Webb–Kenyon Act (1913) 以及 1933 年《啤酒与葡萄酒收入法》。</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>以互动视角回望 1920–1933：法律、经济与社会情绪的共振实验。</footer>
+
+  <script>
+    const timelineData = [
+      {year: 1913, title: 'Webb–Kenyon Act', detail: '禁止从“湿州”向“干州”运输酒类，为联邦介入铺路。'},
+      {year: 1917, title: '第 18 条修正案通过', detail: '国会在一战背景下通过禁酒修正案，强调节粮与爱国。'},
+      {year: 1919, title: '沃斯泰德法案', detail: '将含酒精 >0.5% 的饮品定义为“烈性”，设立执法框架。'},
+      {year: 1920, title: '联邦禁酒生效', detail: '仅约 1500 名联邦探员，地方配合不足；黑市萌芽。'},
+      {year: 1925, title: '黑市与帮派化', detail: '走私与私酿规模化，芝加哥等城市帮派暴力升级。'},
+      {year: 1929, title: '公众转向', detail: '民调显示多数倾向废除，圣瓦伦丁节大屠杀加剧质疑。'},
+      {year: 1933, title: '第 21 条修正案', detail: '通过州公约 ratification，正式废除联邦禁酒，州级管制回归。'}
+    ];
+
+    const causes = {
+      reform: [
+        {title: '道德改革', text: '抑制贫困与家暴的道德工程，得到福音派与女权团体联合推送。', tag: '社会/宗教'},
+        {title: '工业效率', text: '工厂需要清醒劳动力，企业主借禁酒降低事故与旷工。', tag: '经济'},
+        {title: '税制转向', text: '所得税上线后对酒税依赖下降，为禁酒腾出财政空间。', tag: '财政'},
+        {title: '战时节粮', text: '一战节粮与反德情绪叠加，赋予禁酒“爱国”正当性。', tag: '政治'},
+        {title: '本土主义', text: '新移民饮酒文化被视为“不美国”威胁，助推立法。', tag: '文化'}
+      ],
+      resistance: [
+        {title: '城市抵抗', text: '夜生活与餐饮依赖酒类，地方执法消极甚至合谋。', tag: '城市/经济'},
+        {title: '执法缺口', text: '仅 1500 名联邦探员，腐败蔓延，黑市越打越旺。', tag: '治理'},
+        {title: '公共反弹', text: '秘酒馆催生“反叛”中产与青年，舆论逐渐倒向废除。', tag: '文化/世代'},
+        {title: '黑市暴力', text: '帮派垄断与地盘战让凶杀率攀升，暴力与禁酒绑定。', tag: '治安'},
+        {title: '财政压力', text: '酒税蒸发又要执法开支，大萧条时期更需合法税源。', tag: '财政'}
+      ]
+    };
+
+    const timelineCards = document.getElementById('timeline-cards');
+    const yearRange = document.getElementById('year-range');
+    const yearLabel = document.getElementById('year-label');
+    const flippedYears = new Set();
+    let timelineInteracted = false;
+    let activeYearIndex = 0;
+
+    function buildTimeline() {
+      timelineData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'timeline-card';
+        card.dataset.index = index;
+        card.style.setProperty('--delay', `${index * 80}ms`);
+        card.innerHTML = `
+          <div class="face front">
+            <div class="logo-mark">PL</div>
+            <div class="front-label">${index === 0 ? '首个线索' : '解锁节点'}</div>
+            <div class="front-label">${item.year}</div>
+          </div>
+          <div class="face back">
+            <div class="chips"><span class="chip">${item.year}</span></div>
+            <h3>${item.title}</h3>
+            <p class="list">${item.detail}</p>
+          </div>`;
+        card.addEventListener('click', () => handleTimelineInteraction(index));
+        timelineCards.appendChild(card);
+      });
+      refreshTimelineFaces(false);
+    }
+
+    function refreshTimelineFaces(withPulse = false) {
+      const cards = [...timelineCards.querySelectorAll('.timeline-card')];
+      cards.forEach((card, idx) => {
+        const shouldFlip = flippedYears.has(idx) || (idx === activeYearIndex && timelineInteracted);
+        card.classList.toggle('flipped', shouldFlip);
+        card.classList.toggle('active', idx === activeYearIndex);
+        if (withPulse && idx === activeYearIndex) {
+          card.classList.add('flip-seq');
+          setTimeout(() => card.classList.remove('flip-seq'), 750);
+        }
+      });
+    }
+
+    function cascadeTimelineFlip(originIndex) {
+      const cards = [...timelineCards.querySelectorAll('.timeline-card')];
+      cards.forEach((card, idx) => {
+        if (flippedYears.has(idx)) return;
+        const delay = 90 * Math.abs(idx - originIndex);
+        setTimeout(() => {
+          card.classList.add('flipped', 'flip-seq');
+          flippedYears.add(idx);
+          setTimeout(() => card.classList.remove('flip-seq'), 720);
+        }, delay);
+      });
+    }
+
+    function handleTimelineInteraction(index) {
+      timelineInteracted = true;
+      activeYearIndex = index;
+      flippedYears.add(index);
+      yearRange.value = index;
+      updateYearLabel();
+      refreshTimelineFaces(true);
+      cascadeTimelineFlip(index);
+    }
+
+    function updateYearLabel() {
+      const item = timelineData[activeYearIndex];
+      yearLabel.textContent = `${item.year}`;
+    }
+
+    yearRange.addEventListener('input', (e) => {
+      timelineInteracted = true;
+      const idx = parseInt(e.target.value, 10);
+      activeYearIndex = idx;
+      flippedYears.add(idx);
+      updateYearLabel();
+      refreshTimelineFaces(true);
+      cascadeTimelineFlip(idx);
+    });
+
+    yearRange.value = activeYearIndex;
+    updateYearLabel();
+    buildTimeline();
+
+    const causeGrid = document.getElementById('cause-grid');
+    const toggleView = document.getElementById('toggle-view');
+    const causeFlipped = { reform: new Set(), resistance: new Set() };
+    let causeInteracted = false;
+
+    function renderCauses(mode) {
+      causeGrid.innerHTML = '';
+      causes[mode].forEach((cause, idx) => {
+        const isFlipped = causeFlipped[mode].has(idx) && causeInteracted;
+        const card = document.createElement('div');
+        card.className = `cause-card glow-card reveal${isFlipped ? ' flipped' : ''}`;
+        card.style.setProperty('--delay', `${idx * 60}ms`);
+        card.innerHTML = `
+          <div class="face front">
+            <div class="logo-mark">BL</div>
+            <div class="front-label">${mode === 'reform' ? '支持视角' : '反对视角'}</div>
+            <div class="front-label">${cause.tag}</div>
+          </div>
+          <div class="face back">
+            <div class="chips"><span class="chip">${cause.tag}</span></div>
+            <h3>${cause.title}</h3>
+            <p class="list">${cause.text}</p>
+            <div class="meter" aria-hidden="true"><div class="meter-fill" style="width:${60 + idx * 8}%"></div></div>
+          </div>
+        `;
+        card.addEventListener('click', () => {
+          causeInteracted = true;
+          causeFlipped[mode].add(idx);
+          card.classList.add('flipped');
+        });
+        causeGrid.appendChild(card);
+        setTimeout(() => card.classList.remove('reveal'), 900 + idx * 20);
+      });
+    }
+
+    function cascadeFlip(mode) {
+      const cards = [...causeGrid.querySelectorAll('.cause-card')];
+      cards.forEach((card, i) => {
+        setTimeout(() => {
+          card.classList.add('flipped');
+          causeFlipped[mode].add(i);
+        }, 120 + i * 120);
+      });
+    }
+
+    toggleView.addEventListener('change', () => {
+      const mode = toggleView.checked ? 'resistance' : 'reform';
+      causeInteracted = true;
+      renderCauses(mode);
+      setTimeout(() => cascadeFlip(mode), 80);
+    });
+
+    renderCauses('reform');
+
+    const supportRange = document.getElementById('support-range');
+    const supportValue = document.getElementById('support-value');
+    const supportMeter = document.getElementById('support-meter');
+    const enforceValue = document.getElementById('enforce-value');
+    const crimeValue = document.getElementById('crime-value');
+
+    supportRange.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      supportValue.textContent = `${val}%`;
+      supportMeter.style.width = `${val}%`;
+      const enforce = Math.round(1500 * (1 + (val - 20) / 200));
+      const crime = Math.max(4, 16 - (val - 20) * 0.15).toFixed(1);
+      enforceValue.textContent = enforce;
+      crimeValue.textContent = `${crime}%`;
+    });
+
+    function scrollToSection(id) {
+      document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+    }
+  </script>
+</body>
+</html>
