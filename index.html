@@ -109,6 +109,7 @@
       position: relative;
       cursor: pointer;
       min-height: 170px;
+      overflow: hidden;
     }
     .timeline-card.active {border-color: var(--accent); box-shadow: var(--glow);}
     .timeline-card .face {
@@ -134,6 +135,16 @@
       letter-spacing: 0.08em;
       text-transform: uppercase;
       box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      transform: rotateY(0deg);
+      position: relative;
+    }
+    .timeline-card .front::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(255,255,255,0.08), transparent 45%);
+      mix-blend-mode: screen;
+      pointer-events: none;
     }
     .timeline-card .front .logo-mark {
       width: 54px;
@@ -149,11 +160,13 @@
     }
     .timeline-card .front .front-label {color: var(--muted); font-size: 0.9rem;}
     .timeline-card .back {
-      background: rgba(255,255,255,0.03);
+      background: linear-gradient(145deg, rgba(86,112,255,0.16), rgba(255,140,55,0.14));
       transform: rotateY(-180deg);
+      align-content: start;
+      gap: 0.45rem;
     }
-    .timeline-card.flipped .front {transform: rotateY(180deg);}    
-    .timeline-card.flipped .back {transform: rotateY(0deg);}    
+    .timeline-card.flipped .front {transform: rotateY(180deg);}
+    .timeline-card.flipped .back {transform: rotateY(0deg);}
     .timeline-card.flip-seq {
       animation: flipCard 0.6s var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
     }
@@ -265,9 +278,11 @@
     .cause-card .back {
       background: linear-gradient(145deg, rgba(86,112,255,0.14), rgba(255,140,55,0.12));
       transform: rotateY(-180deg);
+      gap: 0.6rem;
     }
-    .cause-card.flipped .front {transform: rotateY(180deg);}    
-    .cause-card.flipped .back {transform: rotateY(0deg);}    
+    .cause-card.flipped .front {transform: rotateY(180deg);}
+    .cause-card.flipped .back {transform: rotateY(0deg);}
+    .cause-card .back p {margin: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;}
     @keyframes popSpin {
       0% {transform: scale(0.82) rotateY(-35deg); opacity: 0;}
       55% {transform: scale(1.03) rotateY(6deg); opacity: 1;}
@@ -431,18 +446,18 @@
 
     const causes = {
       reform: [
-        {title: '道德改革', text: '禁酒被视为遏制贫困、家庭暴力的道德工程，得到福音派与女权团体支持。', tag: '社会/宗教'},
-        {title: '工业效率', text: '企业希望保持工人纪律与安全，减少酗酒导致的旷工与事故。', tag: '经济'},
-        {title: '税制转向', text: '16 条修正案开征所得税，降低联邦对酒税的依赖，使禁酒在财政上可行。', tag: '财政'},
-        {title: '战时节粮', text: '一战时期强调谷物节约与反德情绪（酿酒业多由德裔掌控），推动禁酒合法性。', tag: '政治'},
-        {title: '本土主义', text: '将移民群体的酒文化视为“不美国”的威胁，推动地方与联邦立法。', tag: '文化'}
+        {title: '道德改革', text: '抑制贫困与家暴的道德工程，得到福音派与女权团体联合推送。', tag: '社会/宗教'},
+        {title: '工业效率', text: '工厂需要清醒劳动力，企业主借禁酒降低事故与旷工。', tag: '经济'},
+        {title: '税制转向', text: '所得税上线后对酒税依赖下降，为禁酒腾出财政空间。', tag: '财政'},
+        {title: '战时节粮', text: '一战节粮与反德情绪叠加，赋予禁酒“爱国”正当性。', tag: '政治'},
+        {title: '本土主义', text: '新移民饮酒文化被视为“不美国”威胁，助推立法。', tag: '文化'}
       ],
       resistance: [
-        {title: '城市抵抗', text: '大城市经济依赖夜生活与餐饮，地方执法消极甚至合谋。', tag: '城市/经济'},
-        {title: '执法缺口', text: '1500 名联邦探员难以覆盖全国，腐败滋生，黑市越打越旺。', tag: '治理'},
-        {title: '公共反弹', text: '中产与青年在秘酒馆形成“反叛文化”，逐步转向支持废除。', tag: '文化/世代'},
-        {title: '黑市暴力', text: '帮派化垄断导致凶杀率上升，舆论将暴力与禁酒绑定。', tag: '治安'},
-        {title: '财政压力', text: '失去酒税、执法成本高企，经济大萧条后政府更需合法酒税。', tag: '财政'}
+        {title: '城市抵抗', text: '夜生活与餐饮依赖酒类，地方执法消极甚至合谋。', tag: '城市/经济'},
+        {title: '执法缺口', text: '仅 1500 名联邦探员，腐败蔓延，黑市越打越旺。', tag: '治理'},
+        {title: '公共反弹', text: '秘酒馆催生“反叛”中产与青年，舆论逐渐倒向废除。', tag: '文化/世代'},
+        {title: '黑市暴力', text: '帮派垄断与地盘战让凶杀率攀升，暴力与禁酒绑定。', tag: '治安'},
+        {title: '财政压力', text: '酒税蒸发又要执法开支，大萧条时期更需合法税源。', tag: '财政'}
       ]
     };
 
@@ -451,19 +466,18 @@
     const yearLabel = document.getElementById('year-label');
     const flippedYears = new Set();
     let timelineInteracted = false;
+    let activeYearIndex = 0;
 
-    function renderTimeline(activeIndex) {
-      timelineCards.innerHTML = '';
+    function buildTimeline() {
       timelineData.forEach((item, index) => {
-        const isActive = index === activeIndex;
-        const isFlipped = flippedYears.has(index) || (isActive && timelineInteracted);
         const card = document.createElement('div');
-        card.className = `timeline-card${isActive ? ' active' : ''}${isFlipped ? ' flipped' : ''}`;
+        card.className = 'timeline-card';
+        card.dataset.index = index;
         card.style.setProperty('--delay', `${index * 80}ms`);
         card.innerHTML = `
           <div class="face front">
             <div class="logo-mark">PL</div>
-            <div class="front-label">${timelineInteracted ? '继续探索' : '点击翻面'}</div>
+            <div class="front-label">${index === 0 ? '首个线索' : '解锁节点'}</div>
             <div class="front-label">${item.year}</div>
           </div>
           <div class="face back">
@@ -471,36 +485,66 @@
             <h3>${item.title}</h3>
             <p class="list">${item.detail}</p>
           </div>`;
-        card.addEventListener('click', () => {
-          timelineInteracted = true;
-          flippedYears.add(index);
-          yearRange.value = index;
-          updateYear(index);
-        });
-        if (isFlipped) {
-          requestAnimationFrame(() => {
-            card.classList.add('flip-seq');
-            setTimeout(() => card.classList.remove('flip-seq'), 750);
-          });
-        }
+        card.addEventListener('click', () => handleTimelineInteraction(index));
         timelineCards.appendChild(card);
+      });
+      refreshTimelineFaces(false);
+    }
+
+    function refreshTimelineFaces(withPulse = false) {
+      const cards = [...timelineCards.querySelectorAll('.timeline-card')];
+      cards.forEach((card, idx) => {
+        const shouldFlip = flippedYears.has(idx) || (idx === activeYearIndex && timelineInteracted);
+        card.classList.toggle('flipped', shouldFlip);
+        card.classList.toggle('active', idx === activeYearIndex);
+        if (withPulse && idx === activeYearIndex) {
+          card.classList.add('flip-seq');
+          setTimeout(() => card.classList.remove('flip-seq'), 750);
+        }
       });
     }
 
-    function updateYear(index) {
-      const item = timelineData[index];
-      yearLabel.textContent = item.year;
-      renderTimeline(index);
+    function cascadeTimelineFlip(originIndex) {
+      const cards = [...timelineCards.querySelectorAll('.timeline-card')];
+      cards.forEach((card, idx) => {
+        if (flippedYears.has(idx)) return;
+        const delay = 90 * Math.abs(idx - originIndex);
+        setTimeout(() => {
+          card.classList.add('flipped', 'flip-seq');
+          flippedYears.add(idx);
+          setTimeout(() => card.classList.remove('flip-seq'), 720);
+        }, delay);
+      });
+    }
+
+    function handleTimelineInteraction(index) {
+      timelineInteracted = true;
+      activeYearIndex = index;
+      flippedYears.add(index);
+      yearRange.value = index;
+      updateYearLabel();
+      refreshTimelineFaces(true);
+      cascadeTimelineFlip(index);
+    }
+
+    function updateYearLabel() {
+      const item = timelineData[activeYearIndex];
+      yearLabel.textContent = `${item.year}`;
     }
 
     yearRange.addEventListener('input', (e) => {
       timelineInteracted = true;
       const idx = parseInt(e.target.value, 10);
+      activeYearIndex = idx;
       flippedYears.add(idx);
-      updateYear(idx);
+      updateYearLabel();
+      refreshTimelineFaces(true);
+      cascadeTimelineFlip(idx);
     });
 
-    renderTimeline(null);
+    yearRange.value = activeYearIndex;
+    updateYearLabel();
+    buildTimeline();
 
     const causeGrid = document.getElementById('cause-grid');
     const toggleView = document.getElementById('toggle-view');
