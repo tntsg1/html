@@ -9,26 +9,39 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Libre+Baskerville:wght@400;700&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f3ecdf;
+      --bg: #f6eddc;
+      --bg-fiber: rgba(83, 67, 53, 0.08);
       --fg: #2b1d0f;
       --accent: #8b5e3c;
       --muted: #615142;
-      --card: rgba(255, 252, 244, 0.9);
-      --border: rgba(57, 39, 26, 0.25);
+      --card: rgba(255, 252, 244, 0.92);
+      --card-line: rgba(0, 0, 0, 0.05);
+      --border: rgba(57, 39, 26, 0.32);
       --shadow: 0 12px 28px rgba(43, 29, 15, 0.12);
     }
     * {box-sizing: border-box;}
     body {
       margin: 0;
       font-family: 'Libre Baskerville', Georgia, serif;
-      background: radial-gradient(circle at 20% 20%, rgba(139,94,60,0.08), transparent 40%),
-                  radial-gradient(circle at 80% 0%, rgba(112,89,66,0.08), transparent 38%),
-                  repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 4px),
-                  var(--bg);
+      background: var(--bg);
       color: var(--fg);
       line-height: 1.65;
       letter-spacing: 0.01em;
       position: relative;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 18% 24%, rgba(139,94,60,0.08), transparent 33%),
+        radial-gradient(circle at 82% 12%, rgba(112,89,66,0.08), transparent 33%),
+        repeating-linear-gradient(90deg, var(--card-line) 0, var(--card-line) 1px, transparent 1px, transparent 6px),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 8px);
+      mix-blend-mode: multiply;
+      opacity: 0.92;
+      z-index: 0;
     }
     header {
       position: sticky;
@@ -63,7 +76,56 @@
       transition: 0.2s ease;
     }
     nav a:hover {border-color: rgba(43,29,15,0.65); color: var(--accent);}
-    .container {max-width: 1100px; margin: auto; padding: 1.5rem;}
+    .container {max-width: 1100px; margin: auto; padding: 1.5rem; position: relative; z-index: 1;}
+    .broadsheet {
+      background: linear-gradient(180deg, rgba(255,253,249,0.95), rgba(248,240,226,0.95));
+      border: 2px solid rgba(43,29,15,0.38);
+      border-radius: 16px;
+      box-shadow: 0 24px 40px rgba(43,29,15,0.14);
+      position: relative;
+      overflow: hidden;
+    }
+    .broadsheet::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 1px solid rgba(43,29,15,0.18);
+      border-radius: 10px;
+      pointer-events: none;
+    }
+    .section-slab {
+      position: relative;
+      padding: 1.25rem;
+      margin: 1.75rem 0;
+      background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.7), transparent 36%),
+                  radial-gradient(circle at 82% 22%, rgba(139,94,60,0.08), transparent 36%),
+                  linear-gradient(90deg, rgba(0,0,0,0.04) 0, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 360px),
+                  var(--card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .section-slab::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(90deg, transparent 0, transparent 33.33%, rgba(0,0,0,0.08) 33.33%, rgba(0,0,0,0.08) 34.2%, transparent 34.2%, transparent 34.8%, rgba(0,0,0,0.04) 34.8%, rgba(0,0,0,0.04) 35.5%, transparent 35.5%, transparent 100%),
+        repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 10px);
+      mix-blend-mode: multiply;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+    .section-slab::after {
+      content: "";
+      position: absolute;
+      inset: 16px;
+      border: 1px dashed rgba(43,29,15,0.24);
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0.65;
+    }
     .hero {
       margin-top: 0.5rem;
       display: grid;
@@ -74,7 +136,7 @@
     .hero-card {
       padding: 2rem;
       border-radius: 18px;
-      background: var(--card);
+      background: linear-gradient(180deg, #fffaf1, #f0e6d6);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
       position: relative;
@@ -110,29 +172,51 @@
     .glow-card {
       padding: 1.5rem;
       border-radius: 16px;
-      background: var(--card);
+      background: radial-gradient(circle at 14% 18%, rgba(139,94,60,0.05), transparent 32%),
+                  repeating-linear-gradient(0deg, rgba(0,0,0,0.025) 0, rgba(0,0,0,0.025) 1px, transparent 1px, transparent 10px),
+                  var(--card);
       border: 1px solid var(--border);
       box-shadow: var(--shadow);
     }
     section {margin: 2.25rem 0; position: relative;}
-    section h2 {margin-bottom: 0.65rem; font-size: 1.55rem; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 2px solid rgba(43,29,15,0.35); padding-bottom: 0.35rem; font-family: 'Playfair Display', serif;}
+    .news-ribbon {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      border-bottom: 2px double rgba(43,29,15,0.45);
+      padding-bottom: 0.35rem;
+      margin-bottom: 0.85rem;
+    }
+    section h2 {margin: 0; font-size: 1.55rem; letter-spacing: 0.08em; text-transform: uppercase; font-family: 'Playfair Display', serif;}
+    .dateline {color: var(--muted); font-size: 0.95rem; letter-spacing: 0.06em; text-transform: uppercase;}
     .grid {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
     .pill {padding: 0.4rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; background: rgba(255,255,255,0.7);}
     .timeline {
-      background: linear-gradient(180deg, #fffaf1, #f0e4d3);
+      background: linear-gradient(180deg, #fff8ec, #efe0c8);
       border: 1px solid var(--border);
       border-radius: 18px;
       padding: 1.25rem;
       display: grid;
       gap: 1rem;
       box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .timeline::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(43,29,15,0.18);
+      border-radius: 10px;
+      pointer-events: none;
+      mix-blend-mode: multiply;
     }
     .range {width: 100%;}
     .timeline-cards {display: grid; gap: 0.75rem;}
     .timeline-card {
       padding: 1rem;
       border-radius: 14px;
-      background: rgba(43,29,15,0.03);
+      background: linear-gradient(180deg, rgba(43,29,15,0.04), rgba(43,29,15,0.02));
       border: 1px solid var(--border);
       transition: 0.2s ease;
       transform-style: preserve-3d;
@@ -157,7 +241,7 @@
       transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .timeline-card .front {
-      background: linear-gradient(140deg, rgba(0,0,0,0.9), rgba(24,18,12,0.9));
+      background: radial-gradient(circle at 30% 22%, rgba(255,255,255,0.1), transparent 46%), linear-gradient(135deg, rgba(8,6,5,0.95), rgba(14,12,10,0.95));
       color: #f5e9d4;
       justify-items: center;
       text-align: center;
@@ -190,7 +274,7 @@
     }
     .timeline-card .front .front-label {color: #d7c8b8; font-size: 0.9rem;}
     .timeline-card .back {
-      background: linear-gradient(180deg, #fdf7eb, #e9dbc5);
+      background: linear-gradient(180deg, #fdf6e4, #e7d2b2);
       transform: rotateY(-180deg);
       align-content: start;
       gap: 0.45rem;
@@ -224,7 +308,7 @@
       overflow: hidden;
       border-radius: 18px;
       padding: 1.25rem;
-      background: linear-gradient(180deg, #fffaf1, #f1e1cc);
+      background: linear-gradient(180deg, #fff8ec, #efe0c8);
       border: 1px solid var(--border);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
       box-shadow: var(--shadow);
@@ -288,7 +372,7 @@
       transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     }
     .cause-card .front {
-      background: linear-gradient(180deg, rgba(0,0,0,0.9), rgba(18,13,10,0.95));
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.07), transparent 58%), linear-gradient(135deg, rgba(6,5,5,0.95), rgba(15,12,10,0.95));
       align-content: center;
       justify-items: center;
       text-align: center;
@@ -310,7 +394,7 @@
     }
     .cause-card .front .front-label {color: var(--muted);}
     .cause-card .back {
-      background: linear-gradient(180deg, #fdf7eb, #e9dbc5);
+      background: linear-gradient(180deg, #fdf6e4, #e7d2b2);
       transform: rotateY(-180deg);
       gap: 0.6rem;
       color: var(--fg);
@@ -340,8 +424,12 @@
     </nav>
   </header>
 
-  <main class="container">
-    <section id="intro" class="hero">
+  <main class="container broadsheet">
+    <section id="intro" class="hero section-slab">
+      <div class="news-ribbon">
+        <span class="dateline">头版 · 1920–1933</span>
+        <span class="dateline">Morning Edition</span>
+      </div>
       <div class="hero-card">
         <h1>美国禁酒令时代：<br>沉浸式互动长卷</h1>
         <p class="tagline">1920–1933 的“高尚实验”如何从道德理想变成地下狂潮？用交互式时间轴、数据刻度与观点滑块，探索政策、文化与经济的碰撞。</p>
@@ -361,9 +449,10 @@
       </div>
     </section>
 
-    <section id="timeline">
-      <div class="flex">
+    <section id="timeline" class="section-slab">
+      <div class="news-ribbon">
         <h2>关键年份 · 交互时间轴</h2>
+        <span class="dateline">号外 · Breaking Wire</span>
         <span class="pill" id="year-label">点击牌面开启</span>
       </div>
       <div class="timeline">
@@ -372,9 +461,10 @@
       </div>
     </section>
 
-    <section id="causes">
-      <div class="flex">
+    <section id="causes" class="section-slab">
+      <div class="news-ribbon">
         <h2>成因矩阵 · 选择你的视角</h2>
+        <span class="dateline">社论 · Editorial Desk</span>
         <label class="switch-row">改革视角
           <input type="checkbox" class="toggle" id="toggle-view" />
         </label>
@@ -382,8 +472,11 @@
       <div class="grid" id="cause-grid"></div>
     </section>
 
-    <section id="effects">
-      <h2>影响雷达 · 正反效应并存</h2>
+    <section id="effects" class="section-slab">
+      <div class="news-ribbon">
+        <h2>影响雷达 · 正反效应并存</h2>
+        <span class="dateline">城市专栏 · City Desk</span>
+      </div>
       <div class="flex">
         <div class="stat">
           <strong id="support-value">20%</strong>
@@ -421,7 +514,11 @@
       </div>
     </section>
 
-    <section id="repeal" class="two-col">
+    <section id="repeal" class="two-col section-slab">
+      <div class="news-ribbon">
+        <span class="dateline">终章 · Evening Dispatch</span>
+        <span class="dateline">1933</span>
+      </div>
       <div class="glow-card">
         <h2>废除进程 · 1933</h2>
         <div class="chips">
@@ -441,8 +538,11 @@
       </div>
     </section>
 
-    <section id="refs">
-      <h2>参考文献（节选）</h2>
+    <section id="refs" class="section-slab">
+      <div class="news-ribbon">
+        <h2>参考文献（节选）</h2>
+        <span class="dateline">档案室 · Archive</span>
+      </div>
       <div class="grid">
         <div class="glow-card">
           <h4>专著与论文</h4>
