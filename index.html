@@ -6,102 +6,133 @@
   <title>美国禁酒令时代：互动式沉浸体验</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Libre+Baskerville:wght@400;700&family=IM+Fell+English+SC&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0b0d17;
-      --fg: #e8ecf1;
-      --accent: #ff8c37;
-      --muted: #94a3b8;
-      --card: rgba(255,255,255,0.04);
-      --border: rgba(255,255,255,0.08);
-      --glow: 0 20px 60px rgba(255,140,55,0.28);
+      --bg: #f3ecdf;
+      --fg: #2b1d0f;
+      --accent: #8b5e3c;
+      --muted: #615142;
+      --card: rgba(255, 252, 244, 0.9);
+      --border: rgba(57, 39, 26, 0.25);
+      --shadow: 0 12px 28px rgba(43, 29, 15, 0.12);
     }
     * {box-sizing: border-box;}
     body {
       margin: 0;
-      font-family: 'Space Grotesk', system-ui, -apple-system, sans-serif;
-      background: radial-gradient(circle at 20% 20%, rgba(255,140,55,0.12), transparent 25%),
-                  radial-gradient(circle at 80% 0%, rgba(86,112,255,0.18), transparent 25%),
+      font-family: 'Libre Baskerville', Georgia, serif;
+      background: radial-gradient(circle at 20% 20%, rgba(139,94,60,0.08), transparent 40%),
+                  radial-gradient(circle at 80% 0%, rgba(112,89,66,0.08), transparent 38%),
+                  repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 4px),
                   var(--bg);
       color: var(--fg);
       line-height: 1.65;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.01em;
+      position: relative;
     }
     header {
       position: sticky;
       top: 0;
-      backdrop-filter: blur(14px);
-      background: rgba(11,13,23,0.75);
-      border-bottom: 1px solid var(--border);
+      background: rgba(243, 236, 223, 0.96);
+      border-bottom: 3px double rgba(43, 29, 15, 0.5);
       z-index: 10;
     }
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 1rem 1.5rem;
+      padding: 1.25rem 1.5rem 0.75rem;
       gap: 1rem;
     }
-    nav .brand {font-weight: 700; letter-spacing: 0.08em; color: var(--accent);}
-    nav .links {display: flex; gap: 1rem; flex-wrap: wrap;}
-    nav a {color: var(--fg); text-decoration: none; padding: 0.5rem 0.75rem; border-radius: 999px; border: 1px solid transparent; transition: 0.2s ease;}
-    nav a:hover {border-color: var(--border); background: rgba(255,255,255,0.06);}
-    .container {max-width: 1200px; margin: auto; padding: 1.5rem;}
+    nav .brand {
+      font-family: 'IM Fell English SC', 'Playfair Display', serif;
+      letter-spacing: 0.12em;
+      font-size: 1.35rem;
+      color: var(--fg);
+      text-transform: uppercase;
+    }
+    nav .links {display: flex; gap: 0.9rem; flex-wrap: wrap;}
+    nav a {
+      color: var(--fg);
+      text-decoration: none;
+      padding: 0.35rem 0.45rem;
+      border-bottom: 1px solid transparent;
+      font-size: 0.95rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: 0.2s ease;
+    }
+    nav a:hover {border-color: rgba(43,29,15,0.65); color: var(--accent);}
+    .container {max-width: 1100px; margin: auto; padding: 1.5rem;}
     .hero {
-      margin-top: 1rem;
+      margin-top: 0.5rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      align-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.25rem;
+      align-items: stretch;
     }
     .hero-card {
       padding: 2rem;
-      border-radius: 24px;
-      background: linear-gradient(135deg, rgba(255,140,55,0.12), rgba(86,112,255,0.14));
-      border: 1px solid var(--border);
-      box-shadow: var(--glow);
-    }
-    h1 {margin: 0; font-size: clamp(2rem, 4vw, 3rem); line-height: 1.2;}
-    .tagline {color: var(--muted); margin: 1rem 0 1.5rem;}
-    .cta {display: inline-flex; gap: 0.75rem; flex-wrap: wrap;}
-    .button {
-      background: var(--accent);
-      color: #0b0d17;
-      border: none;
-      padding: 0.85rem 1.4rem;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(255,140,55,0.35);
-      transition: transform 0.15s ease;
-    }
-    .button:hover {transform: translateY(-2px);}
-    .outline {background: transparent; color: var(--fg); border: 1px solid var(--border); box-shadow: none;}
-    .glow-card {
-      padding: 1.5rem;
       border-radius: 18px;
       background: var(--card);
       border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
     }
-    section {margin: 2.5rem 0;}
-    section h2 {margin-bottom: 0.75rem; font-size: 1.6rem;}
-    .grid {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
-    .pill {padding: 0.35rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 0.9rem;}
-    .timeline {
+    .hero-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(139,94,60,0.08), transparent 55%);
+      pointer-events: none;
+      mix-blend-mode: multiply;
+    }
+    h1 {margin: 0; font-family: 'Playfair Display', 'Libre Baskerville', serif; font-size: clamp(2.1rem, 4vw, 3.1rem); line-height: 1.15; letter-spacing: 0.04em;}
+    .tagline {color: var(--muted); margin: 1rem 0 1.35rem; font-size: 1.02rem;}
+    .tagline::first-letter {font-size: 1.4em; font-family: 'IM Fell English SC', serif; padding-right: 4px;}
+    .cta {display: inline-flex; gap: 0.75rem; flex-wrap: wrap;}
+    .button {
+      background: linear-gradient(180deg, #fdf7eb, #eddcc3);
+      color: var(--fg);
+      border: 1px solid rgba(43,29,15,0.35);
+      padding: 0.78rem 1.35rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-family: 'Playfair Display', serif;
+      cursor: pointer;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), var(--shadow);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+    .button:hover {transform: translateY(-2px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 18px 32px rgba(43,29,15,0.18);}
+    .outline {background: transparent; color: var(--fg); border: 1px solid rgba(43,29,15,0.45); box-shadow: inset 0 1px 0 rgba(255,255,255,0.7);}
+    h3, h4 {font-family: 'Playfair Display', serif; letter-spacing: 0.02em; color: var(--fg);}
+    .glow-card {
+      padding: 1.5rem;
+      border-radius: 16px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+    section {margin: 2.25rem 0; position: relative;}
+    section h2 {margin-bottom: 0.65rem; font-size: 1.55rem; letter-spacing: 0.08em; text-transform: uppercase; border-bottom: 2px solid rgba(43,29,15,0.35); padding-bottom: 0.35rem; font-family: 'Playfair Display', serif;}
+    .grid {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
+    .pill {padding: 0.4rem 0.75rem; border-radius: 999px; border: 1px solid var(--border); color: var(--muted); font-size: 0.9rem; background: rgba(255,255,255,0.7);}
+    .timeline {
+      background: linear-gradient(180deg, #fffaf1, #f0e4d3);
+      border: 1px solid var(--border);
+      border-radius: 18px;
       padding: 1.25rem;
       display: grid;
       gap: 1rem;
+      box-shadow: var(--shadow);
     }
     .range {width: 100%;}
     .timeline-cards {display: grid; gap: 0.75rem;}
     .timeline-card {
       padding: 1rem;
       border-radius: 14px;
-      background: rgba(255,255,255,0.03);
+      background: rgba(43,29,15,0.03);
       border: 1px solid var(--border);
       transition: 0.2s ease;
       transform-style: preserve-3d;
@@ -111,7 +142,7 @@
       min-height: 170px;
       overflow: hidden;
     }
-    .timeline-card.active {border-color: var(--accent); box-shadow: var(--glow);}
+    .timeline-card.active {border-color: var(--accent); box-shadow: var(--shadow);}
     .timeline-card .face {
       position: absolute;
       inset: 0;
@@ -126,15 +157,13 @@
       transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
     }
     .timeline-card .front {
-      background: radial-gradient(circle at 15% 20%, rgba(255,255,255,0.1), transparent 38%),
-                  radial-gradient(circle at 80% 30%, rgba(255,140,55,0.18), transparent 32%),
-                  #03040a;
-      color: #e8ecf1;
+      background: linear-gradient(140deg, rgba(0,0,0,0.9), rgba(24,18,12,0.9));
+      color: #f5e9d4;
       justify-items: center;
       text-align: center;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05), inset 0 0 0 2px rgba(0,0,0,0.35);
       transform: rotateY(0deg);
       position: relative;
     }
@@ -142,7 +171,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(160deg, rgba(255,255,255,0.08), transparent 45%);
+      background: linear-gradient(160deg, rgba(255,255,255,0.12), transparent 50%);
       mix-blend-mode: screen;
       pointer-events: none;
     }
@@ -150,20 +179,22 @@
       width: 54px;
       height: 54px;
       border-radius: 12px;
-      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,140,55,0.18));
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), transparent 55%), linear-gradient(180deg, #1a140f, #0e0c09);
       display: grid;
       place-items: center;
       font-weight: 700;
       font-size: 1.1rem;
-      color: #ffe9d8;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+      color: #f0d7b5;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.38);
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    .timeline-card .front .front-label {color: var(--muted); font-size: 0.9rem;}
+    .timeline-card .front .front-label {color: #d7c8b8; font-size: 0.9rem;}
     .timeline-card .back {
-      background: linear-gradient(145deg, rgba(86,112,255,0.16), rgba(255,140,55,0.14));
+      background: linear-gradient(180deg, #fdf7eb, #e9dbc5);
       transform: rotateY(-180deg);
       align-content: start;
       gap: 0.45rem;
+      color: var(--fg);
     }
     .timeline-card.flipped .front {transform: rotateY(180deg);}
     .timeline-card.flipped .back {transform: rotateY(0deg);}
@@ -176,14 +207,15 @@
       100% {transform: rotateY(0deg) translateY(0);}
     }
     .chips {display: flex; gap: 0.5rem; flex-wrap: wrap;}
-    .chip {padding: 0.35rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.08); font-size: 0.9rem;}
+    .chip {padding: 0.35rem 0.7rem; border-radius: 8px; background: rgba(255,255,255,0.7); border: 1px solid var(--border); font-size: 0.88rem; color: var(--fg);}
     .flex {display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;}
     .stat {
       flex: 1 1 200px;
       padding: 1rem;
       border-radius: 14px;
-      background: linear-gradient(135deg, rgba(86,112,255,0.18), rgba(255,140,55,0.18));
+      background: linear-gradient(180deg, #fdf7eb, #e9dbc5);
       border: 1px solid var(--border);
+      box-shadow: var(--shadow);
     }
     .stat strong {font-size: 1.6rem;}
     .cards-hover {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));}
@@ -192,12 +224,13 @@
       overflow: hidden;
       border-radius: 18px;
       padding: 1.25rem;
-      background: rgba(255,255,255,0.04);
+      background: linear-gradient(180deg, #fffaf1, #f1e1cc);
       border: 1px solid var(--border);
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: var(--shadow);
     }
-    .cards-hover article:hover {transform: translateY(-4px); box-shadow: var(--glow);}
-    .badge {position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.35rem 0.7rem; background: var(--accent); color: #0b0d17; border-radius: 999px; font-weight: 700;}
+    .cards-hover article:hover {transform: translateY(-4px); box-shadow: 0 16px 30px rgba(43,29,15,0.18);}
+    .badge {position: absolute; top: 0.75rem; right: 0.75rem; padding: 0.35rem 0.7rem; background: var(--accent); color: #fffaf1; border-radius: 999px; font-weight: 700; letter-spacing: 0.04em;}
     .switch-row {display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;}
     .toggle {appearance: none; width: 48px; height: 26px; background: var(--border); border-radius: 13px; position: relative; outline: none; cursor: pointer; transition: 0.2s ease;}
     .toggle::after {content: ""; position: absolute; width: 20px; height: 20px; top: 3px; left: 3px; background: #fff; border-radius: 50%; transition: 0.2s ease;}
@@ -207,11 +240,11 @@
       width: 100%;
       height: 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(43,29,15,0.08);
       overflow: hidden;
       border: 1px solid var(--border);
     }
-    .meter-fill {height: 100%; width: 40%; background: linear-gradient(90deg, #566fff, #ff8c37); transition: width 0.3s ease;}
+    .meter-fill {height: 100%; width: 40%; background: linear-gradient(90deg, #b07a4e, #8b5e3c); transition: width 0.3s ease;}
     footer {margin: 2rem 0 1rem; color: var(--muted); font-size: 0.9rem; text-align: center;}
     .two-col {display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));}
     .list {margin: 0.4rem 0; color: var(--muted);}
@@ -221,7 +254,7 @@
       border: 1px solid var(--border);
       border-radius: 18px;
       background: transparent;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.35);
+      box-shadow: var(--shadow);
       transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease;
       transform-style: preserve-3d;
       perspective: 1200px;
@@ -237,8 +270,8 @@
     }
     .cause-card:hover {
       transform: translateY(-4px) rotateX(2deg) rotateY(-2deg);
-      box-shadow: var(--glow);
-      border-color: rgba(255,140,55,0.6);
+      box-shadow: 0 16px 30px rgba(43,29,15,0.18);
+      border-color: rgba(139,94,60,0.7);
     }
     .cause-card.reveal {
       animation: popSpin 0.72s var(--delay, 0ms) cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -255,7 +288,7 @@
       transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.25s ease;
     }
     .cause-card .front {
-      background: linear-gradient(180deg, rgba(0,0,0,0.85), rgba(8,10,18,0.92));
+      background: linear-gradient(180deg, rgba(0,0,0,0.9), rgba(18,13,10,0.95));
       align-content: center;
       justify-items: center;
       text-align: center;
@@ -267,18 +300,20 @@
       width: 58px;
       height: 58px;
       border-radius: 14px;
-      background: linear-gradient(135deg, rgba(86,112,255,0.22), rgba(255,140,55,0.2));
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,0.12), transparent 55%), linear-gradient(180deg, #1a140f, #0e0c09);
       display: grid;
       place-items: center;
       color: #fff1e6;
       font-weight: 800;
       box-shadow: 0 16px 38px rgba(0,0,0,0.45);
+      border: 1px solid rgba(255,255,255,0.08);
     }
     .cause-card .front .front-label {color: var(--muted);}
     .cause-card .back {
-      background: linear-gradient(145deg, rgba(86,112,255,0.14), rgba(255,140,55,0.12));
+      background: linear-gradient(180deg, #fdf7eb, #e9dbc5);
       transform: rotateY(-180deg);
       gap: 0.6rem;
+      color: var(--fg);
     }
     .cause-card.flipped .front {transform: rotateY(180deg);}
     .cause-card.flipped .back {transform: rotateY(0deg);}
@@ -293,7 +328,7 @@
 <body>
   <header>
     <nav class="container">
-      <div class="brand">PROHIBITION LAB</div>
+      <div class="brand">Prohibition Herald</div>
       <div class="links">
         <a href="#intro">概览</a>
         <a href="#timeline">时间轴</a>
